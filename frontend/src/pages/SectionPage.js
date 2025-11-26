@@ -131,9 +131,7 @@ const SectionPage = () => {
     return str;
   };
 
-  const yesterday = new Date(currentDate);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const formattedYesterday = yesterday.toISOString().split('T')[0].split('-').reverse().join('/');
+  const formattedCurrentDate = new Date(currentDate).toISOString().split('T')[0].split('-').reverse().join('/');
 
   if (section === 'position' && data !== null) {
     return (
@@ -175,7 +173,7 @@ const SectionPage = () => {
           </div>
           <div className="bg-white border border-gray-300 rounded-lg shadow-md p-4 md:p-6 mb-8 print-section">
             <h1 className="text-xl md:text-2xl font-bold text-center mb-4 text-gray-800">PCSTE/SECR POSITION</h1>
-            <p className="text-center text-gray-600 text-sm md:text-base">Position as on: {formattedYesterday}</p>
+            <p className="text-center text-gray-600 text-sm md:text-base">Position as on: {formattedCurrentDate}</p>
           </div>
           {currentTemplate !== 'default' && (
             <div className="p-4 bg-blue-100 border border-blue-300 rounded-lg mb-4">
@@ -360,7 +358,7 @@ const SectionPage = () => {
                 <div className={`template-preview ${previewTemplate.orientation.toLowerCase()}-orientation p-4`}>
                   <div className="bg-white border border-gray-300 rounded-lg shadow-md p-4 md:p-6 mb-8 print-only">
                     <h1 className="text-xl md:text-2xl font-bold text-center mb-4 text-gray-800">PCSTE/SECR POSITION</h1>
-                    <p className="text-center text-gray-600 text-sm md:text-base">Position as on: {formattedYesterday}</p>
+                    <p className="text-center text-gray-600 text-sm md:text-base">Position as on: {formattedCurrentDate}</p>
                   </div>
                   <div className="bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden mb-8 print-only">
                     <div className="overflow-x-auto">
