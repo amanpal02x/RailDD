@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 const SectionPage = () => {
@@ -15,8 +15,7 @@ const SectionPage = () => {
   const [currentTemplate, setCurrentTemplate] = useState('default');
   const [previewTemplate, setPreviewTemplate] = useState(null);
 
-  const datetimeRef = useRef(null);
-  const [targetCell, setTargetCell] = useState(null);
+
 
   const rowLabels = [
     'ICMS & COM-POSITION',
@@ -60,7 +59,7 @@ const SectionPage = () => {
     'Remarks'
   ];
 
-  const columns = ['No.', 'Name of the circuit', 'TOTAL FAILURE Dt & Time', 'RT At Dt & Time', 'RM Hrs.Min', 'Failure Remarks & Action taken'];
+
 
   const internetColumns = ['Testing Time', 'Dn Link speed', 'Up Link Speed', 'Google / Yahoo', 'secr.indianrailway.gov.in', 'Indianrail.gov.in', 'Different Web Site Response (Fast / Slow)', 'Remarks & Action Taken'];
 
@@ -77,7 +76,7 @@ const SectionPage = () => {
       setInternetSpeedData([Array(internetColumns.length).fill('')]);
     }
     setIsEditing(currentDate === today);
-  }, [currentDate, division, section, today]);
+  }, [currentDate, division, section, today, rowLabels.length, internetColumns.length]);
 
   const saveData = () => {
     if (!isEditing) return;
@@ -130,26 +129,6 @@ const SectionPage = () => {
       }
     }
     return str;
-  };
-
-  const openDateTimePicker = (rowIndex, colIndex) => {
-    if (!isEditing) return;
-    const now = new Date();
-    const currentIso = now.toISOString().slice(0, 16);
-    datetimeRef.current.value = currentIso;
-    setTargetCell({ row: rowIndex, col: colIndex });
-    setTimeout(() => {
-      datetimeRef.current.click();
-    }, 0);
-  };
-
-  const handleHiddenDateTimeChange = (e) => {
-    if (targetCell) {
-      const newData = [...data];
-      newData[targetCell.row][targetCell.col] = e.target.value;
-      setData(newData);
-      setTargetCell(null);
-    }
   };
 
   const yesterday = new Date(currentDate);
@@ -238,44 +217,22 @@ const SectionPage = () => {
                         />
                       </td>
                       <td className="px-2 md:px-4 py-2 md:py-3 border border-gray-300 w-32 md:w-40">
-                        <div className="flex">
-                          <input
-                            type="text"
-                            placeholder="dd-mm-yyyy hh:mm"
-                            value={formatDateTime(data[rowIndex][0])}
-                            onChange={(e) => handleMainCellChange(rowIndex, 0, e.target.value)}
-                            readOnly={!isEditing}
-                            className={`flex-1 px-1 md:px-2 py-1 md:py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-1 focus:ring-railway-blue text-xs md:text-sm ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => openDateTimePicker(rowIndex, 0)}
-                            disabled={!isEditing}
-                            className={`px-1 md:px-2 py-1 md:py-2 border border-l-0 bg-gray-50 hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed rounded-r text-gray-500 text-xs md:text-sm ${!isEditing ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                          >
-                            📅
-                          </button>
-                        </div>
+                        <input
+                          type="datetime-local"
+                          value={data[rowIndex][0]}
+                          onChange={(e) => handleMainCellChange(rowIndex, 0, e.target.value)}
+                          readOnly={!isEditing}
+                          className={`w-full px-1 md:px-2 py-1 md:py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-railway-blue text-xs md:text-sm ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        />
                       </td>
                       <td className="px-2 md:px-4 py-2 md:py-3 border border-gray-300 w-32 md:w-40">
-                        <div className="flex">
-                          <input
-                            type="text"
-                            placeholder="dd-mm-yyyy hh:mm"
-                            value={formatDateTime(data[rowIndex][1])}
-                            onChange={(e) => handleMainCellChange(rowIndex, 1, e.target.value)}
-                            readOnly={!isEditing}
-                            className={`flex-1 px-1 md:px-2 py-1 md:py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-1 focus:ring-railway-blue text-xs md:text-sm ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => openDateTimePicker(rowIndex, 1)}
-                            disabled={!isEditing}
-                            className={`px-1 md:px-2 py-1 md:py-2 border border-l-0 bg-gray-50 hover:bg-gray-100 disabled:bg-gray-200 disabled:cursor-not-allowed rounded-r text-gray-500 text-xs md:text-sm ${!isEditing ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                          >
-                            📅
-                          </button>
-                        </div>
+                        <input
+                          type="datetime-local"
+                          value={data[rowIndex][1]}
+                          onChange={(e) => handleMainCellChange(rowIndex, 1, e.target.value)}
+                          readOnly={!isEditing}
+                          className={`w-full px-1 md:px-2 py-1 md:py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-railway-blue text-xs md:text-sm ${!isEditing ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                        />
                       </td>
                       <td className="px-2 md:px-4 py-2 md:py-3 border border-gray-300 w-20 md:w-24">
                         <input
@@ -333,12 +290,7 @@ const SectionPage = () => {
               </table>
             </div>
           </div>
-          <input
-            type="datetime-local"
-            ref={datetimeRef}
-            onChange={handleHiddenDateTimeChange}
-            style={{ position: 'absolute', left: '-9999px' }}
-          />
+
         </div>
 
         {showTemplates && (
